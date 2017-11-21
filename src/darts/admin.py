@@ -1,14 +1,14 @@
 from django.contrib import admin
 
-from darts.models import Dart, Player, RefGame, Game, DartPlayed, PlayerScore
+from .models import Dart, Player, RefGame, Game, LnkGamePlayer
 
 # Register your models here.
 
 
 admin.site.register(Dart)
-admin.site.register(RefGame)
 admin.site.register(Player)
+admin.site.register(RefGame)
 admin.site.register(Game)
-admin.site.register(DartPlayed)
-admin.site.register(PlayerScore)
+admin.site.register(LnkGamePlayer)
+
 

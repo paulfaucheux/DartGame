@@ -14,5 +14,7 @@ class SubmitPlayerForm(forms.Form):
     
     def clean(self): 
         cleaned_data = super(SubmitPlayerForm, self).clean()
+        
+
 
     

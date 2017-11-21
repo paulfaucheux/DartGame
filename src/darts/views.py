@@ -3,7 +3,8 @@ from django.shortcuts import render
 from django.views import View
 from darts.forms import SubmitPlayerForm
 
-from darts.models import Player
+from darts.models import Player, RefGame, Game, LnkGamePlayer
+from darts.utils import getScoreArray
 
 import numpy as np
 
@@ -19,13 +20,10 @@ class HomeView(View):
      
     def post(self, request, *args, **kwargs):
         the_form = SubmitPlayerForm(request.POST)
-        context = {
-            "form": the_form
-        }
-        template = "darts/home.html"
+        template = "darts/game.html"
         if the_form.is_valid():
             players = np.array(the_form.cleaned_data.get("player1"))
-            players.append(the_form.cleaned_data.get("player2"))
+            players = np.append(players, the_form.cleaned_data.get("player2"))
             """
             players.append(the_form.cleaned_data.get("player3"))
             players.append(the_form.cleaned_data.get("player4"))
@@ -35,15 +33,33 @@ class HomeView(View):
             players.append(the_form.cleaned_data.get("player8"))
             """
             
-            NumberOfPlayer = 0
+            NumberOfPlayer = len(players)
             obj_players = []
+            obj_refgame = RefGame.objects.get(GameName='Cricket')
+            obj_game = Game.objects.create(GameName=obj_refgame)
             
             for player in players: 
                 if player is not None:
-                    NumberOfPlayer += 1
                     obj_player, created = Player.objects.get_or_create(PlayerName=player)
-                    obj_players = np.append(obj_player)
-                    obj_game = RefGame.objects.get_or_create(RefGame=)
+                    gamePlayer = LnkGamePlayer.objects.create(Player=obj_player, Game=obj_game)
+                    
+            
+            obj_game.init()
+            
+            html_score_table = getScoreArray(obj_game)
+            context = {
+                "table": html_score_table
+            }
+            return render(request, template, context)
+        else:
+            context = {
+                "error": 'The form sent from darts/home.html is not valid initialisation impossible'
+            }
+            return render(request, "darts/error.html", context)
+        
+                    
+                    
+                    
 
                 
             
