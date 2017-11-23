@@ -37,7 +37,6 @@ class Game(models.Model):
     
     def init(self):
         if(self.GameName.GameName == 'Cricket'):
-            print('Object type : {0} and content is: {1}'.format(type(self.GameName), self.GameName))
             all_players_to_init = LnkGamePlayer.objects.filter(Game = self)
             if (all_players_to_init is None):
                 raise 'init_cricket: there is no player linked to the game'

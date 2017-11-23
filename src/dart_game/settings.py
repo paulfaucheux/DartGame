@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 # Application definition
 
