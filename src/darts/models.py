@@ -96,6 +96,7 @@ class Game(models.Model):
 class LnkGamePlayer(models.Model):
     Player      = models.ForeignKey(Player, on_delete=models.CASCADE)
     Game        = models.ForeignKey(Game, on_delete=models.CASCADE)
+    Order       = models.IntegerField()
 
     def __str__(self):
         return [str(self.Game), str(self.Player)]
@@ -108,6 +109,8 @@ class LnkGamePlayer(models.Model):
             raise "LnkGamePlayer save: There is no player for this Game"
         if self.Game == None:
             raise "LnkGamePlayer save: There is no RefGame for this Game"
+        if (self.Order == None):
+            self.Order = LnkGamePlayer.objects.filter(Game=self.Game).count() + 1   
         super(LnkGamePlayer, self).save(*args, **kwargs)
 
     

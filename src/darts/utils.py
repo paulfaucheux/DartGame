@@ -37,9 +37,6 @@ def getScoreArray(obj_game):
 
     return table
 
-            
-def getNextPlayerTurn(obj_lnkgameplayer):
-    return (obj_lnkgameplayer.Player, 2)
 
 def newDartPlayed(the_form_dart, request):
     obj_game = Game.objects.get(pk=int(request.session['pkGame']))
@@ -48,16 +45,23 @@ def newDartPlayed(the_form_dart, request):
     
     obj_lnkgameplayer = LnkGamePlayer.objects.get(Game=obj_game, Player=current_player)
     
-    print('Dart info type: {0}, value:{1}'.format(type(the_form_dart.cleaned_data['dart1']),the_form_dart.cleaned_data['dart1']))
-    obj_dartplayed = LnkGamePlayerDartPlayed.objects.create(
+    #print('Dart info type: {0}, value:{1}'.format(type(the_form_dart.cleaned_data['dart1']),the_form_dart.cleaned_data['dart1']))
+    LnkGamePlayerDartPlayed.objects.create(
         LnkGamePlayer=obj_lnkgameplayer
         , Dart = Dart.objects.get(DartName=str(the_form_dart.cleaned_data['dart1']))
         , Turn = current_dart
     )
-
-    current_player, current_dart = getNextPlayerTurn(obj_lnkgameplayer)
     
-    request.session['CurrentPlayer'] = current_player.pk
+    current_dart += 1
+    
+    if current_dart >= 4:
+        current_dart = 1
+        order = ((obj_lnkgameplayer.Order + 1) % request.session['nbPlayer']) if ((obj_lnkgameplayer.Order + 1) % request.session['nbPlayer'] != 0) else request.session['nbPlayer']
+        print('the new order is: {0} the old one was {1}'.format(order, obj_lnkgameplayer.Order))
+        current_player = LnkGamePlayer.objects.get(Game=obj_game, Order=order).Player
+    
+    print('The player pk is: {0}'.format(current_player.pk) )
+    request.session['pkCurrentPlayer'] = current_player.pk
     request.session['CurrentDart'] = current_dart
 
     return request

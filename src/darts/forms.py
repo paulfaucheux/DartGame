@@ -5,8 +5,9 @@ from darts.models import Dart
 class SubmitPlayerForm(forms.Form):
     player1 = forms.CharField(label='Submit Player Name')
     player2 = forms.CharField(label='Submit Player Name')
-    """
+    
     player3 = forms.CharField(label='Submit Player Name')
+    """
     player4 = forms.CharField(label='Submit Player Name')
     player5 = forms.CharField(label='Submit Player Name')
     player6 = forms.CharField(label='Submit Player Name')
