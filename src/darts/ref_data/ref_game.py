@@ -1,6 +1,7 @@
 
 from darts.models import RefGame
 
-obj = RefGame()
-obj.GameName = "Cricket - cut the throat"
+obj = RefGame(GameName = "Cricket - Cut the throat")
+obj.save()
+obj = RefGame(GameName = "Cricket - Standard")
 obj.save()

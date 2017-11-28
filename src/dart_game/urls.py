@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from darts.views import HomeView, GameView
+from darts.views import HomeView, GameView, AboutView, ContactView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', HomeView.as_view()),
     url(r'^game/$', GameView.as_view()),
+    url(r'^about/$', AboutView.as_view()),
+    #url(r'^home/$', HomeView.as_view()),
+    url(r'^contact/$', ContactView.as_view()),
 ]

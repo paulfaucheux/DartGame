@@ -3,16 +3,17 @@ from django.db import models
 
 
 class Dart(models.Model):
-    DartName    = models.CharField(max_length = 100)
-    DartValue   = models.IntegerField()
+    DartName     = models.CharField(max_length = 100)
+    TotalValue   = models.IntegerField()
+    TimeValue    = models.IntegerField()
+    ValueDart    = models.CharField(max_length = 2)
     
     def __str__(self):
         return str(self.DartName)
 
     def __unicode__(self): #used fr python2
         return str(self.DartName)
-
-
+    
 class Player(models.Model):
     PlayerName = models.CharField(max_length = 200)
     
@@ -36,7 +37,7 @@ class Game(models.Model):
     CreatedDate = models.DateTimeField(auto_now_add=True)
     
     def init(self):
-        if(self.GameName.GameName == 'Cricket'):
+        if(self.GameName.GameName == 'Cricket - Cut the throat'):
             all_players_to_init = LnkGamePlayer.objects.filter(Game = self)
             if (all_players_to_init is None):
                 raise 'init_cricket: there is no player linked to the game'
@@ -88,7 +89,7 @@ class Game(models.Model):
                        LnkGamePlayer = game_player
                        , ScoreValue = 0
                        , DisplayOrder = 7
-                       , ScoreName = 'B'
+                       , ScoreName = '25'
                        )
         else:
             raise "Game init: The Game that you want to start does not exist"

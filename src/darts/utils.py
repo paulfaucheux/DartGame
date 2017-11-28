@@ -27,7 +27,7 @@ def getScoreArray(obj_game):
     df_score_index = df_score.index
     df_score_columns = df_score.columns
 
-    table = '<th>Player' + '</th><th>'.join(df_score_columns) + '</th>'
+    table = '<th>Player</th><th>' + '</th><th>'.join(df_score_columns) + '</th>'
 
     for i in range(0,len(df_score_value)):
         table = table + '<tr><td>' + str(df_score_index[i]) + '</td>'
@@ -37,6 +37,33 @@ def getScoreArray(obj_game):
 
     return table
 
+def updateScoreOtherPlayers(dart, extra_score, obj_game, current_player):
+    players_score = LnkGamePlayerScore.objects.filter(LnkGamePlayer__in= LnkGamePlayer.objects.filter(Game=obj_game), ScoreName = dart.ValueDart)
+    for player in players_score:
+        if player.ScoreValue < 3:
+            main_player_score = LnkGamePlayerScore.objects.get(LnkGamePlayer = player.LnkGamePlayer, ScoreName='Score')
+            main_player_score.ScoreValue += int(dart.ValueDart) * extra_score
+            main_player_score.save()
+
+def updateScoreCurrentPlayer(obj_DartPlayed):
+
+    obj_game = Game.objects.get(pk=obj_DartPlayed.LnkGamePlayer.Game.pk)
+    dart = Dart.objects.get(pk=obj_DartPlayed.Dart.pk)
+    current_scores = LnkGamePlayerScore.objects.filter(LnkGamePlayer=obj_DartPlayed.LnkGamePlayer)
+    
+    if obj_game.GameName.GameName == 'Cricket - Cut the throat':
+        for score in current_scores:
+            if score.ScoreName == dart.ValueDart:
+                score.ScoreValue += dart.TimeValue
+                score.save()
+                if score.ScoreValue > 3:
+                    extra_score = score.ScoreValue - 3
+                    score.ScoreValue = 3
+                    score.save()
+                    updateScoreOtherPlayers(dart, extra_score, obj_game, obj_DartPlayed.LnkGamePlayer.Player)
+    
+        
+    
 
 def newDartPlayed(the_form_dart, request):
     obj_game = Game.objects.get(pk=int(request.session['pkGame']))
@@ -44,24 +71,26 @@ def newDartPlayed(the_form_dart, request):
     current_dart = request.session['CurrentDart']
     
     obj_lnkgameplayer = LnkGamePlayer.objects.get(Game=obj_game, Player=current_player)
-    
-    #print('Dart info type: {0}, value:{1}'.format(type(the_form_dart.cleaned_data['dart1']),the_form_dart.cleaned_data['dart1']))
-    LnkGamePlayerDartPlayed.objects.create(
+
+    obj_DartPlayed = LnkGamePlayerDartPlayed.objects.create(
         LnkGamePlayer=obj_lnkgameplayer
         , Dart = Dart.objects.get(DartName=str(the_form_dart.cleaned_data['dart1']))
         , Turn = current_dart
     )
+    
+    updateScoreCurrentPlayer(obj_DartPlayed)
     
     current_dart += 1
     
     if current_dart >= 4:
         current_dart = 1
         order = ((obj_lnkgameplayer.Order + 1) % request.session['nbPlayer']) if ((obj_lnkgameplayer.Order + 1) % request.session['nbPlayer'] != 0) else request.session['nbPlayer']
-        print('the new order is: {0} the old one was {1}'.format(order, obj_lnkgameplayer.Order))
         current_player = LnkGamePlayer.objects.get(Game=obj_game, Order=order).Player
     
-    print('The player pk is: {0}'.format(current_player.pk) )
     request.session['pkCurrentPlayer'] = current_player.pk
     request.session['CurrentDart'] = current_dart
 
     return request
+
+
+    
