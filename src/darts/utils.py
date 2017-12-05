@@ -27,14 +27,14 @@ def getScoreArray(obj_game):
     df_score_index = df_score.index
     df_score_columns = df_score.columns
 
-    table = '<th>Player</th><th>' + '</th><th>'.join(df_score_columns) + '</th>'
+    table = '<thead><tr><th>Player</th><th>' + '</th><th>'.join(df_score_columns) + '</th></tr></thead><tbody>'
 
     for i in range(0,len(df_score_value)):
         table = table + '<tr><td>' + str(df_score_index[i]) + '</td>'
         for j in range(0,len(df_score_value[i])):
             table = table + '<td>' + str(df_score_value[i][j]) + '</td>'
         table = table + '</tr>'
-
+    table = table + '</tbody>'
     return table
 
 def updateScoreOtherPlayers(dart, extra_score, obj_game, current_player):

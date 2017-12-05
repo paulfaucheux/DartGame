@@ -6,7 +6,7 @@
     <meta name="description" content="Dart Game">
     <meta name="author" content="Paul Faucheux">
     
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <head>
         <title> Dart Game  </title>
@@ -15,24 +15,12 @@
     
     <body lang='en'>
         <div class="container">
-			<header class="masthead clearfix">
-				{% include 'header.html' %}
-			</header>
-			<main role="main" class="jumbotron">
-				{% block script %}
-				{% endblock script %}
-				{% block content %}
-				{% endblock content %}
-			</main>
-                    <footer class="mastfoot">
-                        <div class="inner">
-                            <p>Paul Faucheux</p>
-                        </div>
-                    </footer>
-                </div>
-            </div>
-        </div>    
+            {% include 'header.html' %}
+            
+			{% block content %}
+			{% endblock content %}
+            
+        </div>
         {% include 'javascript.html' %}
     </body>
-    
 </html>
