@@ -29,6 +29,7 @@ class SubmitPlayerForm(forms.Form):
 
 class SubmitDart(forms.Form):
     dart1 = forms.CharField(label='Dart Played')
+
     
     def clean(self):
         cleaned_data = super(SubmitDart, self).clean()
@@ -39,3 +40,4 @@ class SubmitDart(forms.Form):
             raise ValidationError("The dart entered does not exists")
         return dart_value
     
+

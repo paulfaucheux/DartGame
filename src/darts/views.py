@@ -12,8 +12,6 @@ import numpy as np
 
 # Create your views here.
 
-
-
 class HomeView(View):
     def get(self, request, *args, **kwargs):
         the_form = SubmitPlayerForm()
@@ -29,8 +27,9 @@ class HomeView(View):
         print(the_form.is_valid())
         if the_form.is_valid():
             players = ['player1', 'player2', 'player3', 'player4', 'player5', 'player6', 'player7', 'player8']
-
-            obj_refgame = RefGame.objects.get(GameName='Cricket - Cut the throat')
+            
+            pk_GameName = the_form.cleaned_data['game']
+            obj_refgame = RefGame.objects.get(pk=pk_GameName)
             obj_game = Game.objects.create(GameName=obj_refgame)
             nbPlayer = 0
             
@@ -49,11 +48,11 @@ class HomeView(View):
             request.session['pkGame'] = obj_game.pk
             request.session['pkCurrentPlayer'] = obj_player.Player.pk
             request.session['CurrentDart'] = 1
+            request.session['CurrentTurn'] = 1
             request.session['nbPlayer'] = nbPlayer
-            
+
             return HttpResponseRedirect('/game')
         else:
-            #the_form = SubmitPlayerForm(request.POST)
             context = {
                 "title": 'New Game'
                 , "form": the_form
@@ -67,7 +66,6 @@ class HomeView(View):
 class GameView(View):
     def get(self, request, *args, **kwargs):
         the_form_dart = SubmitDart(request.POST)
-        
         obj_game = Game.objects.get(pk=int(request.session['pkGame']))
         
         if obj_game is None:
@@ -75,12 +73,14 @@ class GameView(View):
         
         if the_form_dart.is_valid():
             request = newDartPlayed(the_form_dart, request)
-                
+        
         context = {
             "title": 'Paie ton Bull'
             , "form_dart": SubmitDart()
             , "table": getScoreArray(obj_game)
-            , "current_dart": request.COOKIES.get('CurrentDart')
+            , "current_dart": request.session.get('CurrentDart')
+            , "current_turn": request.session.get('CurrentTurn')
+            , "player_name": Player.objects.get(pk=int(request.session['pkCurrentPlayer'])).PlayerName
         }
             
         return render(request, "darts/game.html", context)
@@ -93,29 +93,28 @@ class GameView(View):
             
             if obj_game is None:
                 raise 'there is no game in the session'
-    
+        
             request = newDartPlayed(the_form_dart, request)
-            
-
             
             html_score_table = getScoreArray(obj_game)
             the_form_dart = SubmitDart()
-    
+            
             context = { "title": 'Paie ton Bull'
                 , "table": html_score_table
                 , "form_dart": the_form_dart
                 , "player_name": Player.objects.get(pk=int(request.session['pkCurrentPlayer'])).PlayerName
                 , "current_dart": request.session['CurrentDart']
+                , "current_turn": request.session['CurrentTurn']
             }
-    
-        else:
-            'GameView post() the form received is invalid'
             
-        return render(request, "darts/game.html", context)
-        
-
-
-
+            return render(request, "darts/game.html", context)
+            
+        else:
+            raise 'GameView post() the form received is invalid'
+            
+    def cancelLastDart(self, request, *args, **kwargs):
+        return
+            
 class AboutView(View):
     def get(self, request, *args, **kwargs):
         return render(request, "darts/about.html", {}) 

@@ -5,15 +5,16 @@
 {% endblock title %}
 
 {% block content %}
-
-
-		<h1 class="cover-heading">{{title}}</h1>
-		<div class="container">
-            <form method='POST' action='.' class="form-signin"> {% csrf_token %}
-                <!--<input name='url' type='text' placeholder='Please enter your URL'>-->
-                {{ form }}
-                <input type='submit' class='btn btn-lg btn-primary btn-block' value='Play'>
-            </form>
-		</div>
+<div>
+    <button class="newGame" aria-expanded="false" data-target="#FormNewGame" data-toggle="collapse" type="button"><h1 class="underline">+ New Game</h1></button> 
+	<div class="collapse" id="FormNewGame" aria-expanded="false" style="height: 0px;"> 
+		<form method='POST' action='.'> 
+    		<div class="newGame well form-group"> 
+    			{{ form }}
+			<input type='submit' class='btn btn-lg btn-primary btn-block' value='Play'>
+			</div>	
+		</form>
+	</div> 
+</div>
 
 {% endblock %}

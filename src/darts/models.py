@@ -37,7 +37,7 @@ class Game(models.Model):
     CreatedDate = models.DateTimeField(auto_now_add=True)
     
     def init(self):
-        if(self.GameName.GameName == 'Cricket - Cut the throat'):
+        if(self.GameName.GameName == 'Cricket - Cut the throat') | (self.GameName.GameName == 'Cricket - Standard'):
             all_players_to_init = LnkGamePlayer.objects.filter(Game = self)
             if (all_players_to_init is None):
                 raise 'init_cricket: there is no player linked to the game'
@@ -90,6 +90,42 @@ class Game(models.Model):
                        , ScoreValue = 0
                        , DisplayOrder = 7
                        , ScoreName = '25'
+                       )
+        elif(self.GameName.GameName == '301'):
+            all_players_to_init = LnkGamePlayer.objects.filter(Game = self)
+            if (all_players_to_init is None):
+                raise 'init_cricket: there is no player linked to the game'
+            else:
+                for game_player in all_players_to_init:
+                    LnkGamePlayerScore.objects.create(
+                       LnkGamePlayer = game_player
+                       , ScoreValue = 301
+                       , DisplayOrder = 1
+                       , ScoreName = 'Score'
+                       ) 
+        elif(self.GameName.GameName == '501'):
+            all_players_to_init = LnkGamePlayer.objects.filter(Game = self)
+            if (all_players_to_init is None):
+                raise 'init_cricket: there is no player linked to the game'
+            else:
+                for game_player in all_players_to_init:
+                    LnkGamePlayerScore.objects.create(
+                       LnkGamePlayer = game_player
+                       , ScoreValue = 501
+                       , DisplayOrder = 1
+                       , ScoreName = 'Score'
+                       )
+        elif(self.GameName.GameName == '701'):
+            all_players_to_init = LnkGamePlayer.objects.filter(Game = self)
+            if (all_players_to_init is None):
+                raise 'init_cricket: there is no player linked to the game'
+            else:
+                for game_player in all_players_to_init:
+                    LnkGamePlayerScore.objects.create(
+                       LnkGamePlayer = game_player
+                       , ScoreValue = 701
+                       , DisplayOrder = 1
+                       , ScoreName = 'Score'
                        )
         else:
             raise "Game init: The Game that you want to start does not exist"
@@ -147,3 +183,13 @@ class LnkGamePlayerScore(models.Model):
     def __unicode__(self): #used fr python2
         return str(self.LnkGamePlayer), str(self.ScoreName), str(self.ScoreValue)
     
+class LnkDartPlayedScore(models.Model):
+    DartPlayed      = models.ForeignKey(LnkGamePlayerDartPlayed, on_delete=models.CASCADE)
+    PlayerScore     = models.ForeignKey(LnkGamePlayerScore, on_delete=models.CASCADE)
+    Value           = models.IntegerField()
+
+    def __str__(self):
+        return str(self.LnkGamePlayer), str(self.ScoreName), str(self.ScoreValue)
+
+    def __unicode__(self): #used fr python2
+        return str(self.LnkGamePlayer), str(self.ScoreName), str(self.ScoreValue)
