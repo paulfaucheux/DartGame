@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+
 {% block title %}
     {{ title }} | {{ block.supper }}
 {% endblock title %}
@@ -11,41 +12,46 @@
 
 
 
-<div>
+<div class='block'>
     <h2 style="text-align:left">Turn: {{ current_turn }}, Player: {{player_name}}  </h2><br>	
     <table class="table table-striped">
         {{ table | safe}}
     </table>
+
+    <div id='turnDarts'>
+        
+        <img src="{% static 'img\dart.png' %}" alt="dart1" style="width:25%;">
+        {% if current_dart <= 2 %}
+        <img src="{% static 'img\dart.png' %}" alt="dart2" style="width:25%;">
+        {% endif %}
+        {% if current_dart == 1 %}
+        <img src="{% static 'img\dart.png' %}" alt="dart3" style="width:25%;">
+        {% endif %}
+        <button class="back_button" onclick="cancelLastDart()" type="button" style="width:15%;">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20%" viewBox="0 0 286.054 286.054" style="enable-background:new 0 0 286.054 286.054;" xml:space="preserve">
+                <g>
+                	<path style="fill:#b71c1c;" d="M168.352,142.924l25.28-25.28c3.495-3.504,3.495-9.154,0-12.64l-12.64-12.649
+                		c-3.495-3.486-9.145-3.495-12.64,0l-25.289,25.289l-25.271-25.271c-3.504-3.504-9.163-3.504-12.658-0.018l-12.64,12.649
+                		c-3.495,3.486-3.486,9.154,0.018,12.649l25.271,25.271L92.556,168.15c-3.495,3.495-3.495,9.145,0,12.64l12.64,12.649
+                		c3.495,3.486,9.145,3.495,12.64,0l25.226-25.226l25.405,25.414c3.504,3.504,9.163,3.504,12.658,0.009l12.64-12.64
+                		c3.495-3.495,3.486-9.154-0.009-12.658L168.352,142.924z M143.027,0.004C64.031,0.004,0,64.036,0,143.022
+                		c0,78.996,64.031,143.027,143.027,143.027s143.027-64.031,143.027-143.027C286.054,64.045,222.022,0.004,143.027,0.004z
+                		 M143.027,259.232c-64.183,0-116.209-52.026-116.209-116.209s52.026-116.21,116.209-116.21s116.209,52.026,116.209,116.209
+                		S207.21,259.232,143.027,259.232z"/>
+                </g>
+    
+            </svg>
+    
+        </button>
+    
+    </div>
 </div>
-<div id='turnDarts'>
 
-    <img src="{% static 'img\dart.png' %}" alt="dart1" style="width:120px;height:63px;">
-    <img src="{% static 'img\dart.png' %}" alt="dart2" style="width:120px;height:63px;">
-    <img src="{% static 'img\dart.png' %}" alt="dart3" style="width:120px;height:63px;">
-    <button class="back_button" type="button" style="width:120px;height:63px;">
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="63px" viewBox="0 0 286.054 286.054" style="enable-background:new 0 0 286.054 286.054;" xml:space="preserve">
-            <g>
-            	<path style="fill:#b71c1c;" d="M168.352,142.924l25.28-25.28c3.495-3.504,3.495-9.154,0-12.64l-12.64-12.649
-            		c-3.495-3.486-9.145-3.495-12.64,0l-25.289,25.289l-25.271-25.271c-3.504-3.504-9.163-3.504-12.658-0.018l-12.64,12.649
-            		c-3.495,3.486-3.486,9.154,0.018,12.649l25.271,25.271L92.556,168.15c-3.495,3.495-3.495,9.145,0,12.64l12.64,12.649
-            		c3.495,3.486,9.145,3.495,12.64,0l25.226-25.226l25.405,25.414c3.504,3.504,9.163,3.504,12.658,0.009l12.64-12.64
-            		c3.495-3.495,3.486-9.154-0.009-12.658L168.352,142.924z M143.027,0.004C64.031,0.004,0,64.036,0,143.022
-            		c0,78.996,64.031,143.027,143.027,143.027s143.027-64.031,143.027-143.027C286.054,64.045,222.022,0.004,143.027,0.004z
-            		 M143.027,259.232c-64.183,0-116.209-52.026-116.209-116.209s52.026-116.21,116.209-116.21s116.209,52.026,116.209,116.209
-            		S207.21,259.232,143.027,259.232z"/>
-            </g>
-
-        </svg>
-
-    </button>
-
-</div>
-
-<div>
+<div class='block'>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
     <script type="text/javascript">
         function cancelLastDart() {
-            window.location.href = '/game/';
+            window.location.href = '/game/back';
         }
         
     	$(document).ready(function(){
@@ -111,7 +117,7 @@
     
     <div id="dartboard">
     	<figure>
-    		<svg id="dartboard" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="680px" height="680px" viewBox="0 0 787 774" enable-background="new 0 0 787 774" xml:space="preserve">
+    		<svg id="dartboard" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 787 774" enable-background="new 0 0 787 774" xml:space="preserve">
     			<g id="areas">
     				<g id="s">
     					<path id="s19" fill="#F7E9CD" d="M327.95 561.926c-1.952-0.825-3.879-1.693-5.795-2.581l66.1-138.906 c2.034 0.8 4.2 1.5 6.4 1.884L374.688 574.84C358.626 572.6 343 568.3 327.9 561.926z M358.728 696.9 l13.366-102.239c-17.849-2.479-35.233-7.257-51.936-14.321c-2.225-0.941-4.422-1.932-6.605-2.945l-44.31 93.1 c3.562 1.7 7.2 3.3 10.8 4.827C305.328 686.1 331.7 693.3 358.7 696.928z"/>

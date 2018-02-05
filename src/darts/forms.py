@@ -14,7 +14,8 @@ class SubmitPlayerForm(forms.Form):
     player8 = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder":"Player name", "class":"form-control"}), required=False)
     game    = forms.ChoiceField(label=''
         , widget=forms.Select(attrs={"placeholder":"Select your game", "class":"form-control"})
-        , choices=[ (game.pk, game.GameName) for game in RefGame.objects.all() ])
+        , choices=[ (game.pk, game.GameName) for game in RefGame.objects.all() ]
+        )
     
     def clean(self): 
         cleaned_data = super(SubmitPlayerForm, self).clean()

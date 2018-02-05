@@ -5,7 +5,7 @@ from django.core import serializers
 
 from darts.forms import SubmitPlayerForm, SubmitDart
 from darts.models import Player, RefGame, Game, LnkGamePlayer
-from darts.utils import getScoreArray, newDartPlayed
+from darts.utils import getScoreArray, newDartPlayed, cancelLastDart
 
 
 import numpy as np
@@ -24,7 +24,6 @@ class HomeView(View):
     def post(self, request, *args, **kwargs):
         
         the_form = SubmitPlayerForm(request.POST)
-        print(the_form.is_valid())
         if the_form.is_valid():
             players = ['player1', 'player2', 'player3', 'player4', 'player5', 'player6', 'player7', 'player8']
             
@@ -41,7 +40,7 @@ class HomeView(View):
                     
             obj_game.init()
             obj_player = LnkGamePlayer.objects.filter(Game=obj_game).first()
-            print('the number of player is {0}'.format(nbPlayer))
+            #print('the number of player is {0}'.format(nbPlayer))
             if (obj_game is None) | (obj_player is None):
                 raise 'There is no Game or no Player'
                 
@@ -112,8 +111,6 @@ class GameView(View):
         else:
             raise 'GameView post() the form received is invalid'
             
-    def cancelLastDart(self, request, *args, **kwargs):
-        return
             
 class AboutView(View):
     def get(self, request, *args, **kwargs):
@@ -123,4 +120,21 @@ class ContactView(View):
     def get(self, request, *args, **kwargs):
         return render(request, "darts/contact.html", {})        
         
+def cancelLastDart_FV( request, *args, **kwargs):
+    obj_game = Game.objects.get(pk=int(request.session['pkGame']))
+    
+    cancelLastDart(request) # enlever une flechette, et ensuite baisser le score pour chaque joueur
+    
+    if obj_game is None:
+        raise 'there is no game in the session'
         
+    context = {
+        "title": 'Paie ton Bull'
+        , "form_dart": SubmitDart()
+        , "table": getScoreArray(obj_game)
+        , "current_dart": request.session.get('CurrentDart')
+        , "current_turn": request.session.get('CurrentTurn')
+        , "player_name": Player.objects.get(pk=int(request.session['pkCurrentPlayer'])).PlayerName
+    }
+
+    return render(request, "darts/game.html", context)

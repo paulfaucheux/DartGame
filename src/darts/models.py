@@ -136,10 +136,10 @@ class LnkGamePlayer(models.Model):
     Order       = models.IntegerField()
 
     def __str__(self):
-        return [str(self.Game), str(self.Player)]
+        return str(self.Game.GameName) + str(self.Player.PlayerName)
 
     def __unicode__(self): #used fr python2
-        return [str(self.Game), str(self.Player)]
+        return str(self.Game.GameName) + str(self.Player.PlayerName)
     
     def save(self, *args, **kwargs):
         if self.Player == None:
@@ -155,6 +155,7 @@ class LnkGamePlayerDartPlayed(models.Model):
     LnkGamePlayer   = models.ForeignKey(LnkGamePlayer, on_delete=models.CASCADE)
     Dart            = models.ForeignKey(Dart, on_delete=models.CASCADE)    
     Turn            = models.IntegerField()
+    TurnDart        = models.IntegerField() ## Use to identify when the player had twice the same dart in the same game
     
     def __str__(self):
         return str(self.Dart)
@@ -176,20 +177,23 @@ class LnkGamePlayerScore(models.Model):
     ScoreValue      = models.IntegerField()
     DisplayOrder    = models.IntegerField()
     ScoreName       = models.CharField(max_length=6)
+
     
     def __str__(self):
-        return str(self.LnkGamePlayer), str(self.ScoreName), str(self.ScoreValue)
+        return str(self.LnkGamePlayer)+ str(self.ScoreName)+ str(self.ScoreValue)
 
     def __unicode__(self): #used fr python2
-        return str(self.LnkGamePlayer), str(self.ScoreName), str(self.ScoreValue)
-    
-class LnkDartPlayedScore(models.Model):
+        return str(self.LnkGamePlayer)+ str(self.ScoreName)+ str(self.ScoreValue)
+
+
+class LnkDartPlayedScoreUpdate(models.Model):
     DartPlayed      = models.ForeignKey(LnkGamePlayerDartPlayed, on_delete=models.CASCADE)
-    PlayerScore     = models.ForeignKey(LnkGamePlayerScore, on_delete=models.CASCADE)
-    Value           = models.IntegerField()
+    Player          = models.ForeignKey(Player, on_delete=models.CASCADE)
+    ScoreName       = models.CharField(max_length=6)
+    ScoreValue      = models.IntegerField()
 
     def __str__(self):
-        return str(self.LnkGamePlayer), str(self.ScoreName), str(self.ScoreValue)
+        return str(self.Player.PlayerName) + ' Score Name: ' + str(self.ScoreName) + ' Score Value: ' + str(self.ScoreValue)
 
     def __unicode__(self): #used fr python2
-        return str(self.LnkGamePlayer), str(self.ScoreName), str(self.ScoreValue)
+        return str(self.Player.PlayerName) + str(self.ScoreName) +  str(self.ScoreValue)

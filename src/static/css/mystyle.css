@@ -116,45 +116,6 @@ div.newGame {
 }
 
 /*
-h1.underline:before {
-	content:'';
-	display:block;
-	position:absolute;
-	left:0;
-	bottom:0;
-	height:2px;
-	width:0;
-	transition:width 0s ease, background .5s ease;
-}
-
-h1.underline:after {
-	content:'';
-	display:block;
-	position:absolute;
-	right:0;
-	bottom:0;
-	height:2px;
-	width:0;
-	background:grey;
-	transition:width .5s ease;
-}
-
-h1.underline:hover:before {
-	width:100%;
-	background:grey;
-	transition:width .5s ease;
-}
-
-h1.underline:hover:after {
-	width:100%;
-	background:transparent;
-	transition:all 0s ease;
-}
-
-*/
-
-
-/*
  * Footer
  */
 
@@ -192,21 +153,63 @@ h1.underline:hover:after {
 }
 
 @media (min-width: 992px) {
+  .header,
   .masthead,
-  .mastfoot,
-  .cover-container {
+  .cover-container,
+  .mastfoot {
     width: 700px;
   }
 }
+
 
 
 /*
 GAME
 */
 
+.game {
+  padding-top: 80px;
+  
+}
 
 button.back_button {
 	background-color:transparent;
 	border:0;
 	position: absolute;
+}
+
+figure {
+	margin:0;
+	padding:0;
+}
+
+.block {
+  float: left;
+  clear: none;   
+}
+
+@media (min-width: 768px) {
+  .block {
+    width:100%;
+  }
+}
+
+@media (min-width: 1500px) {
+  .block {
+    width: 50%;
+    padding-left:20px;
+    padding-right:20px;
+  }
+}
+
+#turnDarts {
+  text-align:left;
+}
+
+#dartboard {
+  max-width: 650px;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    color: #333;
 }
