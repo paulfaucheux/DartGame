@@ -21,8 +21,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', HomeView.as_view()),
     url(r'^game/$', GameView.as_view()),
-    url(r'^game/back/$', cancelLastDart_FV),
+    url(r'^game_back/$', cancelLastDart_FV),
     url(r'^about/$', AboutView.as_view()),
-    #url(r'^home/$', HomeView.as_view()),
+    url(r'^home/$', HomeView.as_view()),
     url(r'^contact/$', ContactView.as_view()),
 ]

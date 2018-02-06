@@ -38,6 +38,7 @@ def getScoreArray(obj_game):
     return table
 
 def addLnkDartPlayedScoreUpdate(dartPlayed,player,scoreName,scoreValue):
+    print('The player {} played {} for a value of {}'.format(player.PlayerName, dartPlayed.Dart.DartName, scoreValue))
     LnkDartPlayedScoreUpdate.objects.create(DartPlayed = dartPlayed,Player = player,ScoreName = scoreName,ScoreValue = scoreValue)
     return None
 
@@ -54,7 +55,7 @@ def updateScoreCurrentPlayerCricket(lnkGamePlayer, score, dart, obj_DartPlayed,c
     main_player_score = LnkGamePlayerScore.objects.get(LnkGamePlayer = lnkGamePlayer, ScoreName='Score')
     main_player_score.ScoreValue += score
     main_player_score.save()
-    addLnkDartPlayedScoreUpdate(obj_DartPlayed,LnkGamePlayer.Player,'Score',score)
+    addLnkDartPlayedScoreUpdate(obj_DartPlayed,obj_DartPlayed.LnkGamePlayer.Player,'Score',score)
      
 
 
@@ -89,7 +90,13 @@ def updateScoreCurrentPlayer(obj_DartPlayed, request):
                     updateScoreCurrentPlayerCricket(obj_DartPlayed.LnkGamePlayer, int(dart.ValueDart) * extra_score, dart, obj_DartPlayed,current_turn)
                 else:
                     addLnkDartPlayedScoreUpdate(obj_DartPlayed,obj_DartPlayed.LnkGamePlayer.Player,dart.ValueDart,dart.TimeValue)
-                    
+    elif obj_game.GameName.GameName in ['301','501','701']:
+        for score in current_scores:
+            if score.ScoreName == 'Score':
+                if dart.TotalValue <= score.ScoreValue:
+                    score.ScoreValue -= dart.TotalValue
+                    score.save()
+                    addLnkDartPlayedScoreUpdate(obj_DartPlayed,obj_DartPlayed.LnkGamePlayer.Player,'Score',dart.TotalValue)               
     else:
         raise 'No rules to update the score for game {0}'.format(obj_game.GameName.GameName)
     
@@ -155,7 +162,10 @@ def cancelLastDart(request):
             LnkGamePlayer = new_LnkGamePlayer
             , ScoreName = score_to_update.ScoreName) 
         #print('old_score: {}\tnew_score: {}'.format(new_score.ScoreValue, score_to_update.ScoreValue ))
-        new_score.ScoreValue = new_score.ScoreValue - score_to_update.ScoreValue
+        if score_to_update.DartPlayed.LnkGamePlayer.Game.GameName.IsScoreDecreasing:
+            new_score.ScoreValue = new_score.ScoreValue + score_to_update.ScoreValue
+        else:
+            new_score.ScoreValue = new_score.ScoreValue - score_to_update.ScoreValue
         new_score.save()
         
     return None

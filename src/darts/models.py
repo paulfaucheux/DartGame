@@ -24,13 +24,14 @@ class Player(models.Model):
         return str(self.PlayerName)
         
 class RefGame(models.Model):
-    GameName = models.CharField(max_length=200)
+    GameName            = models.CharField(max_length=200)
+    IsScoreDecreasing   = models.BooleanField()
     
     def __str__(self):
-        return str(self.GameName)
+        return str(self.GameName) + ' IsScoreDecreasing ' + str(self.IsScoreDecreasing)
 
     def __unicode__(self): #used fr python2
-        return str(self.GameName)
+        return str(self.GameName) + ' IsScoreDecreasing ' + str(self.IsScoreDecreasing)
 
 class Game(models.Model):
     GameName    = models.ForeignKey(RefGame, on_delete=models.CASCADE)
