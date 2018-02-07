@@ -10,7 +10,7 @@ def getScoreArray(obj_game):
     df_score = pd.DataFrame()
     
     for obj_LnkGamePlayer in LnkGamePlayer.objects.filter(Game=obj_game):
-        str_player = obj_LnkGamePlayer.Player
+        str_player = obj_LnkGamePlayer.Player.PlayerName
         
         for obj_LnkGamePlayerScore in LnkGamePlayerScore.objects.filter(LnkGamePlayer = obj_LnkGamePlayer):
             int_ScoreValue = obj_LnkGamePlayerScore.ScoreValue
