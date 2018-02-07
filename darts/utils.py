@@ -38,7 +38,7 @@ def getScoreArray(obj_game):
     return table
 
 def addLnkDartPlayedScoreUpdate(dartPlayed,player,scoreName,scoreValue):
-    print('The player {} played {} for a value of {}'.format(player.PlayerName, dartPlayed.Dart.DartName, scoreValue))
+    #print('The player {} played {} for a value of {}'.format(player.PlayerName, dartPlayed.Dart.DartName, scoreValue))
     LnkDartPlayedScoreUpdate.objects.create(DartPlayed = dartPlayed,Player = player,ScoreName = scoreName,ScoreValue = scoreValue)
     return None
 
