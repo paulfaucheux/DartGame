@@ -155,7 +155,7 @@ def cancelLastDart(request):
     for score_to_update in LnkDartPlayedScoreUpdate.objects.filter(DartPlayed=last_dart_played):
         #print('Score: {}'.format(score_to_update))
       
-        new_LnkGamePlayer = LnkGamePlayer.objects.filter(
+        new_LnkGamePlayer = LnkGamePlayer.objects.get(
             Game = score_to_update.DartPlayed.LnkGamePlayer.Game
             , Player = score_to_update.Player)
         new_score = LnkGamePlayerScore.objects.get(
