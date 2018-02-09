@@ -1,6 +1,7 @@
 
 from darts.models import Dart
 
+Dart(ValueDart='0', TimeValue=1, TotalValue=0, DartName='s0').save()
 Dart(ValueDart='1', TimeValue=1, TotalValue=1, DartName='s1').save()
 Dart(ValueDart='2', TimeValue=1, TotalValue=2, DartName='s2').save()
 Dart(ValueDart='3', TimeValue=1, TotalValue=3, DartName='s3').save()

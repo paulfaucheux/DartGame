@@ -138,3 +138,4 @@ def cancelLastDart_FV( request, *args, **kwargs):
     }
 
     return render(request, "darts/game.html", context)
+

@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^about/$', AboutView.as_view()),
     url(r'^home/$', HomeView.as_view()),
     url(r'^contact/$', ContactView.as_view()),
+
 ]
