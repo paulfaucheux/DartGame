@@ -93,10 +93,20 @@ def updateScoreCurrentPlayer(obj_DartPlayed, request):
     elif obj_game.GameName.GameName in ['301','501','701']:
         for score in current_scores:
             if score.ScoreName == 'Score':
-                if dart.TotalValue <= score.ScoreValue:
-                    score.ScoreValue -= dart.TotalValue
-                    score.save()
-                    addLnkDartPlayedScoreUpdate(obj_DartPlayed,obj_DartPlayed.LnkGamePlayer.Player,'Score',dart.TotalValue)               
+                score.ScoreValue -= dart.TotalValue
+                if score.ScoreValue < 0:
+                    list_darts_played = LnkGamePlayerDartPlayed.objects.filter(
+                        LnkGamePlayer = obj_DartPlayed.LnkGamePlayer
+                        , Turn = current_turn
+                    )
+                    print('score too high')
+                    
+                    for dart_played in list_darts_played:
+                        print('we cancel {}'.format(dart_played.Dart.TotalValue))
+                        score.ScoreValue += dart_played.Dart.TotalValue
+                    
+                score.save()
+                addLnkDartPlayedScoreUpdate(obj_DartPlayed,obj_DartPlayed.LnkGamePlayer.Player,'Score',dart.TotalValue)               
     else:
         raise 'No rules to update the score for game {0}'.format(obj_game.GameName.GameName)
     
@@ -104,9 +114,7 @@ def updateScoreCurrentPlayer(obj_DartPlayed, request):
     
 
 def newDartPlayed(the_form_dart, request):
-    
-
-    
+        
     obj_game = Game.objects.get(pk=int(request.session['pkGame']))
     current_player = Player.objects.get(pk=int(request.session['pkCurrentPlayer']))
     current_dart = request.session['CurrentDart']
