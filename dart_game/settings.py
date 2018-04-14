@@ -25,7 +25,7 @@ SECRET_KEY = 'mxk58zt(xoljv%jqs-%n8lwv&!p16)0hlmoad(*^j2fmc39$4!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gbhql82','localhost']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
